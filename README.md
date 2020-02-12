@@ -14,6 +14,9 @@ $ npm install connect-session-sequelize
 
 * `db` a successfully connected Sequelize instance
 * `table` *(optional)* a table/model which has already been imported to your Sequelize instance, this can be used if you want to use a specific table in your db
+* `modelKey` *(optional)* a string for the key in sequelize's models-object but it is also the name of the class to which it references (conventionally written in Camelcase) that's why it is "Session" by default if `table` is not defined.
+* `tableName` *(optional)* a string for naming the generated table if `table` is not defined.
+Default is the value of `modelKey`.
 * `extendDefaultFields` *(optional)* a way add custom data to table columns. Useful if using a custom model definition
 * `disableTouch` *(optional)* When true, the store will not update the db when receiving a touch() call. This can be useful in limiting db writes and introducing more manual control of session updates.
 
@@ -23,13 +26,13 @@ $ npm install connect-session-sequelize
 With connect
 
 ```javascript
-var connect = require('connect')
-	// for express, just call it with 'require('connect-session-sequelize')(session.Store)'
-	, SequelizeStore = require('connect-session-sequelize')(connect.session.Store);
+const connect = require('connect');
+// for express, just call it with 'require('connect-session-sequelize')(session.Store)'
+const SequelizeStore = require('connect-session-sequelize')(connect.session.Store);
 
 connect().use(connect.session({
-	store: new SequelizeStore(options)
-	, secret: 'CHANGEME'
+	store: new SequelizeStore(options),
+	secret: 'CHANGEME'
 }));
 ```
 
@@ -40,7 +43,6 @@ With express 4:
 // load dependencies
 var express = require('express')
 var Sequelize = require('sequelize')
-var cookieParser = require('cookie-parser')
 var session = require('express-session');
 
 // initalize sequelize with session store
@@ -57,7 +59,6 @@ var sequelize = new Sequelize(
 
 // configure express
 var app = express()
-app.use(cookieParser())
 app.use(session({
   secret: 'keyboard cat',
   store: new SequelizeStore({
